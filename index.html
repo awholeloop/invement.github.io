@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="utf-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+	<title>Invement</title>
+	<link rel="stylesheet" type="text/css" href="style.css">
+	<link rel="stylesheet" type="text/css" href="https://awholeloop.github.io/style2.css">
+	<link rel="icon" href="logo.PNG" type="image/icon type">
+	<script src="https://cdn.jsdelivr.net/npm/web3@1.4.0/dist/web3.min.js"></script>
+</head>
+<body class="body">
+	<img src="logo.png" id="logo">
+	<h1><span id="title">Invement!</span><br><span>Your way into investment</span></h1>
+	<button onclick="incrementCount()">Click me</button>
+	<p id="count">0</p>
+	<button onclick="makePayment()">Pay with MetaMask</button>
+
+	<script>
+		let count = parseFloat(localStorage.getItem('count')) || 0;
+		document.getElementById('count').innerHTML = count;
+
+		function incrementCount() {
+			count += 0.5;
+			localStorage.setItem('count', count);
+			document.getElementById('count').innerHTML = count;
+		}
+
+		async function makePayment() {
+			if (window.ethereum) {
+				const web3 = new Web3(window.ethereum);
+				try {
+					await window.ethereum.enable();
+					const contractAddress = "0x4e8C420C8DB9D24D2e08546132D7b9Ac60c16dC4"; 
+					const amount = web3.utils.toWei("0.1", "ether"); // Payment amount in wei
+					const transaction = await web3.eth.sendTransaction({
+						to: contractAddress,
+						value: amount
+					});
+					console.log("Transaction hash:", transaction.transactionHash);
+				} catch (error) {
+					console.error("User denied account access:", error);
+				}
+			} else {
+				console.error("MetaMask is not available");
+			}
+		}
+	</script>
+</body>
+</html>
